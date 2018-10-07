@@ -1,0 +1,58 @@
+{
+  "name": "portalibra",
+  "version": "0.0.0",
+  "description": "Portal for dictionaries",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "set NODE_ENV=development&& nodemon",
+    "build": "set NODE_ENV=production",
+    "test": "set NODE_ENV=testing&& jest --noStackTrace",
+    "lint": "tslint -p ./"
+  },
+  "pre-commit": "lint",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fantkolja/portalibra.git"
+  },
+  "keywords": [
+    "dictionary",
+    "portal"
+  ],
+  "author": "Mykola Fant",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fantkolja/portalibra/issues"
+  },
+  "homepage": "https://github.com/fantkolja/portalibra#readme",
+  "devDependencies": {
+    "@types/express": "^4.16.0",
+    "@types/jest": "^23.3.1",
+    "@types/supertest": "^2.0.5",
+    "jest": "^23.5.0",
+    "nodemon": "^1.18.3",
+    "pre-commit": "^1.2.2",
+    "supertest": "^3.1.0",
+    "ts-jest": "^23.1.4",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.11.0",
+    "tslint-config-airbnb": "^5.10.0",
+    "typescript": "^2.9.2"
+  },
+  "dependencies": {
+    "express": "^4.16.3"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(test.*|(\\.|/)(test|spec))\\.ts$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  }
+}
