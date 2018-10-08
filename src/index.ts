@@ -32,3 +32,27 @@ server.get('/*', (req, res) => {
 //    res.render('error', { error: err })
 //   }
 server.start();
+
+
+// const https = require('https');
+// const fs = require('fs');
+
+// console.log('requesting zdu timetable');
+
+// const options = {
+//   hostname: 'dekanat.zu.edu.ua',
+//   // port: 443,
+//   path: '/cgi-bin/timetable.cgi?n=701&lev=141&faculty=0&query=',
+//   method: 'GET'
+// };
+
+// const teachersStream = fs.createWriteStream('logs/teachers-list.txt');
+
+// const req = https.request(options, (res) => {
+//   res.pipe(teachersStream);
+// });
+
+// req.on('error', (e) => {
+//   console.error(e);
+// });
+// req.end();
