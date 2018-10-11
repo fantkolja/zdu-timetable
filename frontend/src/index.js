@@ -101,8 +101,6 @@ class Game extends React.Component {
   }
 
   render() {
-    const test = <div class="testing-class" data-test="34" module="test123">Some test</div>;
-    console.log(test);
     const history = this.state.history;
     const current = history[this.state.currentMove];
     const winner = calculateWinner(current.squares);
