@@ -7,7 +7,8 @@ import { HeroController } from './api/controllers/HeroController';
 const port: number = Number(process.env.API_PORT);
 const server: ApiServer = new ApiServer(port);
 
-const staticRoot = path.join(__dirname, '../frontend/dist/frontend');
+// TODO: move static files path to config
+const staticRoot = path.join(__dirname, '../frontend/build');
 const staticMiddleware: express.Handler = express.static(`${staticRoot}`);
 
 // app.use(logger('dev'));
