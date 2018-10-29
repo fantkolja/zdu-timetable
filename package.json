@@ -40,7 +40,8 @@
     "typescript": "^2.9.2"
   },
   "dependencies": {
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "iconv-lite": "^0.4.24"
   },
   "jest": {
     "transform": {

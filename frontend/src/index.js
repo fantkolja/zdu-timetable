@@ -135,7 +135,95 @@ class Game extends React.Component {
           <div>{status}</div>
           <ol>{moves}</ol>
         </div>
+        { !winner && <Timer disable={winner} /> }
       </div>
+    );
+  }
+}
+
+class Timer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      time: new Date(),
+      isStopped: false,
+    };
+    this.timerId = null;
+  }
+
+  tick() {
+    if (!this.state.isStopped) {
+      this.setState({
+        time: new Date(),
+      });
+    }
+  }
+
+  componentDidMount() {
+    console.log('didMount');
+    this.timerId = setInterval(this.tick.bind(this), 1000);
+  }
+
+  componentWillUnmount() {
+    console.log('willUnmount');
+    clearInterval(this.timerId);
+  }
+
+  handleClick() {
+    console.log('Timer toggled to', !this.state.isStopped);
+    this.setState({
+      isStopped: !this.state.isStopped,
+    });
+  }
+
+  render() {
+    return (
+      <FormattedTime time={this.state.time} onClick={() => this.handleClick()} />
+    );
+  }
+}
+
+function FormattedTime(props) {
+  return (
+    <p onClick={props.onClick}>{props.time.toLocaleTimeString()}</p>
+  );
+}
+
+class MyForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: 'const',
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({
+      name: event.target.value,
+    });
+  }
+
+  handleSubmit(event) {
+    alert(this.state.name);
+    event.preventDefault();
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          Name:
+          <input
+            type="text"
+            placeholder="Enter your name..."
+            value={this.state.name}
+          />
+        </label>
+        <button type="submit">Submit</button>
+      </form>
     );
   }
 }
@@ -143,6 +231,9 @@ class Game extends React.Component {
 // ========================================
 
 ReactDOM.render(
-  <Game />,
+  <main>
+    <Game />
+    <MyForm />
+  </main>,
   document.getElementById('root')
 );

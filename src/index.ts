@@ -1,19 +1,19 @@
 import { ApiServer } from './api/server';
 import { DictionaryController } from './api/controllers/DictionaryController';
-import * as path from 'path';
+import { join } from 'path';
 import * as express from 'express';
-import { HeroController } from './api/controllers/HeroController';
+import { timetableScrapper } from './services/scrapper';
 
 const port: number = Number(process.env.API_PORT);
 const server: ApiServer = new ApiServer(port);
 
 // TODO: move static files path to config
-const staticRoot = path.join(__dirname, '../frontend/build');
+const staticRoot = join(__dirname, '../frontend/build');
 const staticMiddleware: express.Handler = express.static(`${staticRoot}`);
 
 // app.use(logger('dev'));
 // TODO: INTERCEPT all /api calls
-server.addControllers([DictionaryController, HeroController]);
+server.addControllers([DictionaryController]);
 server.addMiddleware(staticMiddleware);
 server.get('/*', (req, res) => {
   res.status(200).sendFile(`${staticRoot}/index.html`);
@@ -34,25 +34,4 @@ server.get('/*', (req, res) => {
 //   }
 server.start();
 
-// const https = require('https');
-// const fs = require('fs');
-
-// console.log('requesting zdu timetable');
-
-// const options = {
-//   hostname: 'dekanat.zu.edu.ua',
-//   // port: 443,
-//   path: '/cgi-bin/timetable.cgi?n=701&lev=141&faculty=0&query=',
-//   method: 'GET'
-// };
-
-// const teachersStream = fs.createWriteStream('logs/teachers-list.txt');
-
-// const req = https.request(options, (res) => {
-//   res.pipe(teachersStream);
-// });
-
-// req.on('error', (e) => {
-//   console.error(e);
-// });
-// req.end();
+timetableScrapper.getTeachers();
