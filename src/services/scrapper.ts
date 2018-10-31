@@ -7,8 +7,7 @@ class TimetableScrapper {
   private static setupURL(endpoint: string): string {
     const url = new URL(endpoint);
     url.searchParams.set('n', '701');
-    url.searchParams.set('lev', '141');
-    url.searchParams.set('faculty', '0');
+    url.searchParams.set('faculty', '1004'); // NNIIF
     return url.toString();
   }
 
@@ -27,13 +26,14 @@ class TimetableScrapper {
     return TimetableScrapper.setupURL(this.endpoint);
   }
 
+  // TODO: return Promise
   public getTeacher(name: string): void {
     const url = new URL(this.url);
     url.searchParams.set('query', name);
+    url.searchParams.set('lev', '141'); // teachers
     const options = TimetableScrapper.getRequestOptions(url, 'GET');
 
     const converterStream = decodeStream('win1251');
-    console.log(options);
     const req = request(options, (res) => {
       res.pipe(converterStream);
     });
@@ -49,6 +49,26 @@ class TimetableScrapper {
 
   public getTeachers(): void {
     return this.getTeacher('');
+  }
+
+  public getGroups(): void {
+    const url = new URL(this.url);
+    url.searchParams.set('query', '');
+    url.searchParams.set('lev', '142'); // teachers
+    const options = TimetableScrapper.getRequestOptions(url, 'GET');
+
+    const converterStream = decodeStream('win1251');
+    const req = request(options, (res) => {
+      res.pipe(converterStream);
+    });
+
+    req.on('error', (e) => {
+      console.error(e);
+    });
+    converterStream.on('data', (data) => {
+      console.log(data);
+    });
+    req.end();
   }
 }
 
