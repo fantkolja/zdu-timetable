@@ -1,22 +1,39 @@
-import { request } from 'https';
+import { request, RequestOptions } from 'https';
 import { decodeStream } from 'iconv-lite';
 
-console.log('requesting zdu timetable');
-
-const hostname = 'dekanat.zu.edu.ua';
+const endpoint = 'https://dekanat.zu.edu.ua/cgi-bin/timetable.cgi';
 
 class TimetableScrapper {
-  constructor(private hostname: string) {
+  private static setupURL(endpoint: string): string {
+    const url = new URL(endpoint);
+    url.searchParams.set('n', '701');
+    url.searchParams.set('lev', '141');
+    url.searchParams.set('faculty', '0');
+    return url.toString();
   }
 
-  public getTeachers(): void {
-    const options = {
-      hostname: this.hostname,
-      path: `/cgi-bin/timetable.cgi?n=701&lev=141&faculty=0&query=${encodeURIComponent('Фант')}`,
-      method: 'GET',
+  private static getRequestOptions(url: URL, method: string): RequestOptions {
+    return {
+      method,
+      hostname: url.hostname,
+      path: `${url.pathname}${url.search}`,
     };
+  }
+
+  constructor(private endpoint: string) {
+  }
+
+  get url(): string {
+    return TimetableScrapper.setupURL(this.endpoint);
+  }
+
+  public getTeacher(name: string): void {
+    const url = new URL(this.url);
+    url.searchParams.set('query', name);
+    const options = TimetableScrapper.getRequestOptions(url, 'GET');
 
     const converterStream = decodeStream('win1251');
+    console.log(options);
     const req = request(options, (res) => {
       res.pipe(converterStream);
     });
@@ -29,8 +46,12 @@ class TimetableScrapper {
     });
     req.end();
   }
+
+  public getTeachers(): void {
+    return this.getTeacher('');
+  }
 }
 
-const timetableScrapper = new TimetableScrapper(hostname);
+const timetableScrapper = new TimetableScrapper(endpoint);
 
 export { timetableScrapper };

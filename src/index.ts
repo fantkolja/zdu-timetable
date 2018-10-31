@@ -34,4 +34,5 @@ server.get('/*', (req, res) => {
 //   }
 server.start();
 
-timetableScrapper.getTeachers();
+// timetableScrapper.getTeachers();
+timetableScrapper.getTeacher('Фант');
