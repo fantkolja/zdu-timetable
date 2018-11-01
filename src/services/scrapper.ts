@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { decode } from 'iconv-lite';
+import { decode, encode } from 'iconv-lite';
+import { stringify } from 'querystring';
 
 const endpoint = 'https://dekanat.zu.edu.ua/cgi-bin/timetable.cgi';
 
@@ -41,29 +42,18 @@ class TimetableScrapper {
       .then(data => console.log(decode(data, 'win1251')));
   }
 
-  // public getTimeTable() {
-  //   const url = new URL(this.url);
-  //   url.searchParams.set('query', '');
-  //   url.searchParams.set('lev', '142'); // teachers
-  //   const options = TimetableScrapper.getRequestOptions(url, 'POST');
-  //
-  //   // const converterStream = decodeStream('win1251');
-  //   const req = request(options, (res) => {
-  //     // res.pipe(converterStream);
-  //     res.on('data', (data) => {
-  //       console.log(data);
-  //     });
-  //   });
-  //
-  //   req.on('error', (e) => {
-  //     console.error(e);
-  //   });
-  //   // converterStream.on('data', (data) => {
-  //   //   console.log(data);
-  //   // });
-  //   req.end();
-  //   'Фант Микола Олександрович'
-  // }
+  public getTimeTable(): void {
+    axios.post('https://dekanat.zu.edu.ua/cgi-bin/timetable.cgi?n=700', stringify({
+      n: '700',
+      faculty: '1004',
+      teacher: encode('Фант Микола Олександрович', 'win1251'),
+      group: '',
+      sdate: '',
+      edate: '',
+    }), { responseType: 'arraybuffer' })
+      .then(res => res.data)
+      .then(data => console.log(decode(data, 'win1251')));
+  }
 }
 
 const timetableScrapper = new TimetableScrapper(endpoint);

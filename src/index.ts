@@ -36,3 +36,4 @@ server.start();
 
 // timetableScrapper.getTeachers();
 timetableScrapper.getTeacher('Фант');
+// timetableScrapper.getTimeTable();
