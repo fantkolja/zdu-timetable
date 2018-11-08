@@ -3,6 +3,7 @@ import { DictionaryController } from './api/controllers/DictionaryController';
 import { join } from 'path';
 import * as express from 'express';
 import { timetableScrapper } from './services/scrapper';
+import { htmlParser } from './services/html-parser';
 
 const port: number = Number(process.env.API_PORT);
 const server: ApiServer = new ApiServer(port);
@@ -35,5 +36,6 @@ server.get('/*', (req, res) => {
 server.start();
 
 // timetableScrapper.getTeachers();
-timetableScrapper.getTeacher('Фант');
-// timetableScrapper.getTimeTable();
+// timetableScrapper.getTeacher('Фант');
+timetableScrapper.getTimeTable()
+  .then(html => htmlParser.getLessons(html.toString()));

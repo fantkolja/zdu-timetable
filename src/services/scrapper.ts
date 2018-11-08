@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { decode, encode } from 'iconv-lite';
-import { stringify } from 'querystring';
+import * as querystring from 'querystring';
+import { ZDUPostData } from './scrapper.model';
 
 const endpoint = 'https://dekanat.zu.edu.ua/cgi-bin/timetable.cgi';
 
@@ -10,6 +11,12 @@ class TimetableScrapper {
     url.searchParams.set('n', '701');
     url.searchParams.set('faculty', '1004'); // NNIIF
     return url.toString();
+  }
+
+  private static generatePostData(postData: ZDUPostData): Buffer {
+    const postDataString: string = querystring.stringify(postData);
+    const unescapedPostData: string = querystring.unescape(postDataString);
+    return encode(unescapedPostData, 'win1251');
   }
 
   constructor(private endpoint: string) {
@@ -42,17 +49,18 @@ class TimetableScrapper {
       .then(data => console.log(decode(data, 'win1251')));
   }
 
-  public getTimeTable(): void {
-    axios.post('https://dekanat.zu.edu.ua/cgi-bin/timetable.cgi?n=700', stringify({
-      n: '700',
-      faculty: '1004',
-      teacher: encode('Фант Микола Олександрович', 'win1251'),
-      group: '',
-      sdate: '',
-      edate: '',
-    }), { responseType: 'arraybuffer' })
-      .then(res => res.data)
-      .then(data => console.log(decode(data, 'win1251')));
+  public getTimeTable(): Promise<string> {
+    const postData: Buffer = TimetableScrapper.generatePostData({
+      faculty: 1004,
+      teacher: 'Фант',
+      // group: ,
+      // sdate:,
+      // parse from Date 0,+1,0
+      edate: '1.1.2019',
+      n: 700,
+    });
+    return axios.post(this.endpoint, postData, { responseType: 'arraybuffer' })
+      .then(res => decode(res.data, 'win1251'));
   }
 }
 
