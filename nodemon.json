@@ -7,7 +7,7 @@
   ],
   "ext": "ts json",
   "execMap": {
-    "ts": "ts-node"
+    "ts": "node"
   },
   "events": {
     "start": "tslint -c ./tslint.json -t stylish 'src/**/*.ts'"

@@ -5,9 +5,11 @@ class HtmlParser {
   }
 
   public getLessons(html: string): void {
+    debugger;
     const $ = this.cheerio.load(html);
-    const text = $('td').text();
-    console.log(text);
+    const workingDays = $('table');
+
+    console.log(workingDays);
   }
 }
 
