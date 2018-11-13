@@ -1,12 +1,19 @@
-// enum LessonType
+export const enum LessonType {
+  Seminar,
+  Lecture,
+  Test,
+  Pretest,
+  Exam,
+}
 
 export interface Lesson {
   orderNumber: number;
   room: string;
   isSubstitution: boolean;
-  group: string;
+  isSubstituted: boolean; // !isTrackable?
+  groups: string[];
   subject: string;
-  type: keyof LessonType; // ???
+  type: LessonType;
 }
 
 export interface WorkingDay {
