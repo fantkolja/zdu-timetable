@@ -20,12 +20,10 @@ class HtmlParser {
     workingDaysEls.each((i, el) => {
       const dateString = $(el).find('h4').contents()[0].data;
       const date = HtmlParser.generateDate(dateString);
-      const workingDay = {
+      workingDays[i] = {
         date,
       };
-      workingDays[i] = workingDay;
     });
-    console.log(workingDays);
   }
 }
 
