@@ -12,7 +12,7 @@ class HtmlParser {
   constructor(private cheerio: CheerioAPI) {
   }
 
-  public getLessons(html: string): void {
+  public getLessons(html: string): object {
     debugger;
     const $ = this.cheerio.load(html);
     const workingDaysEls = $('.container>.row>.col-md-6');
@@ -24,6 +24,7 @@ class HtmlParser {
         date,
       };
     });
+    return workingDays;
   }
 }
 
