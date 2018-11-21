@@ -15,30 +15,34 @@ class HtmlParser {
   public parseChosenPeriod(html: string): object {
     debugger;
     const $ = this.cheerio.load(html);
-    const workingDaysEls = $('.container>.row>.col-md-6');
-    const workingDays = [];
-    workingDaysEls.each((i, el) => {
-      const dateString = $(el).find('h4').contents()[0].data;
-      const date = HtmlParser.generateDate(dateString);
-      const lessons = this.parseLessons($(el).find('tr'));
-      workingDays[i] = {
-        date,
-        lessons,
-      };
-    });
-    return workingDays;
+    return $('.container>.row>.col-md-6')
+      .toArray()
+      .map((el) => {
+        const dateString = $(el).find('h4').contents().first().text();
+        const date = HtmlParser.generateDate(dateString);
+        const lessonsEls = $(el).find('tr');
+        const lessons = this.parseLessons(lessonsEls, $);
+        return {
+          date,
+          lessons,
+        };
+      });
   }
 
-  private parseLessons(lessonsEls: Cheerio): object {
-    const lessons = [];
-    lessonsEls.each((i, el) => {
-      const lessonEntry = el.children;
-      lessons[i] = {
-        orderNumber: lessonEntry[0],
-        subject: lessonEntry[2],
-      };
-    });
-    return lessons;
+  private parseLessons(lessonsEls: Cheerio, $: CheerioStatic): object {
+    return lessonsEls
+      .toArray()
+      .reduce((lessons, el) => {
+        const contents = $(el).contents();
+        const subject = contents.last().text();
+        if (subject) {
+          lessons.push({
+            subject,
+            orderNumber: contents.first().text(),
+          });
+        }
+        return lessons;
+      }, []);
   }
 }
 

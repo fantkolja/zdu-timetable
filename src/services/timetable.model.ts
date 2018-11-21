@@ -1,8 +1,9 @@
 export const enum LessonType {
   Seminar,
   Lecture,
-  Test,
+  ModuleTest,
   Pretest,
+  ExamConsulting, // ??
   Exam,
 }
 
