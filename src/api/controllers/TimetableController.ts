@@ -15,12 +15,12 @@ export class TimetableController implements Controller {
   }
 
   private initialize(): void {
-    this.router.get('/', this.getAll);
+    this.router.get('/', this.getTimetable);
   }
   // @Get('/') -> this.router.get()
-  private async getAll(req: Request, res: Response, next: NextFunction): Promise<void> {
+  private async getTimetable(req: Request, res: Response, next: NextFunction): Promise<void> {
     const html = await timetableScrapper.getTimeTable();
-    const timetable = htmlParser.getLessons(html.toString());
+    const timetable = htmlParser.parseChosenPeriod(html.toString());
     res.status(200).json({
       timetable,
       message: 'Here is your timetable :)',

@@ -2,6 +2,8 @@ import { ApiServer } from './api/server';
 import { TimetableController } from './api/controllers/TimetableController';
 import { join } from 'path';
 import * as express from 'express';
+import { timetableScrapper } from './services/scrapper';
+import { htmlParser } from './services/html-parser';
 
 const port: number = Number(process.env.API_PORT);
 const server: ApiServer = new ApiServer(port);
@@ -35,3 +37,10 @@ server.start();
 
 // timetableScrapper.getTeachers();
 // timetableScrapper.getTeacher('Фант');
+async function test(): Promise<void> {
+  const html = await timetableScrapper.getTimeTable();
+  const timetable = htmlParser.parseChosenPeriod(html.toString());
+  console.log(timetable);
+}
+
+test();
