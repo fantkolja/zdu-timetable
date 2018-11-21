@@ -29,15 +29,26 @@ class HtmlParser {
       });
   }
 
+  private parseLessonString(lessonStr: string): object {
+    const lessonArr = lessonStr.trim().split(' ');
+    const room = lessonArr.shift();
+    const lessonType = lessonArr.pop().replace(/\(|\)/g, '');
+    console.log(lessonArr.join(' '));
+    return {
+      room,
+      lessonType,
+    };
+  }
+
   private parseLessons(lessonsEls: Cheerio, $: CheerioStatic): object {
     return lessonsEls
       .toArray()
       .reduce((lessons, el) => {
         const contents = $(el).contents();
-        const subject = contents.last().text();
-        if (subject) {
+        const lessonString = contents.last().text();
+        if (lessonString) {
           lessons.push({
-            subject,
+            ...this.parseLessonString(lessonString),
             orderNumber: contents.first().text(),
           });
         }
