@@ -9,6 +9,7 @@ export const enum LessonType {
 
 export interface Lesson {
   orderNumber: number;
+  lessonEntry: string; // unparsed string
   room: string;
   isSubstitution: boolean;
   isSubstituted: boolean; // !isTrackable?

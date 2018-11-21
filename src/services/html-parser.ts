@@ -29,9 +29,10 @@ class HtmlParser {
       });
   }
 
-  private parseLessonString(lessonStr: string): object {
-    const lessonArr = lessonStr.trim().split(' ');
+  private parseLessonString(lessonEntry: string): object {
+    const lessonArr = lessonEntry.trim().split(' ');
     const room = lessonArr.shift();
+    // if (room === 'Увага! Заміна!') isSubstituted
     const lessonType = lessonArr.pop().replace(/\(|\)/g, '');
     console.log(lessonArr.join(' '));
     return {
@@ -45,10 +46,11 @@ class HtmlParser {
       .toArray()
       .reduce((lessons, el) => {
         const contents = $(el).contents();
-        const lessonString = contents.last().text();
-        if (lessonString) {
+        const lessonEntry = contents.last().text();
+        if (lessonEntry) {
           lessons.push({
-            ...this.parseLessonString(lessonString),
+            lessonEntry,
+            ...this.parseLessonString(lessonEntry),
             orderNumber: contents.first().text(),
           });
         }
